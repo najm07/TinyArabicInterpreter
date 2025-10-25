@@ -35,6 +35,23 @@ class Lexer:
             self.advance()
         return Token("NUMBER", int(num_str))
 
+    def string(self):
+        """Return string literals like 'hello' or "world"."""
+        quote_char = self.current_char  # Save the quote character (' or ")
+        self.advance()  # Skip the opening quote
+        
+        result = ""
+        while self.current_char and self.current_char != quote_char:
+            result += self.current_char
+            self.advance()
+        
+        if self.current_char == quote_char:
+            self.advance()  # Skip the closing quote
+        else:
+            raise Exception(f"Unterminated string literal")
+        
+        return Token("STRING", result)
+
     def identifier(self):
         """Return variable names like 'x' or 'foo'."""
         result = ""
@@ -43,6 +60,21 @@ class Lexer:
             self.advance()
         if result == "اكتب":
             return Token("PRINT", result)
+        if result == "أو":
+            return Token("OR", result)
+        if result == "و":
+            return Token("AND", result)
+        if result == "لا":
+            return Token("NOT", result)
+        if result == "اذا":
+            return Token("IF", result)
+        if result == "إلا":
+            return Token("ELSE", result)
+        if result == "منذ":
+            return Token("SINCE", result)
+        if result == "حتى":
+            return Token("UNTIL", result)
+
         return Token("IDENTIFIER", result)
 
     def get_next_token(self):
@@ -57,6 +89,9 @@ class Lexer:
 
             if self.current_char.isdigit():
                 return self.number()
+
+            if self.current_char in ('"', "'"):
+                return self.string()
 
             if self.current_char == '+':
                 self.advance()
@@ -76,7 +111,31 @@ class Lexer:
 
             if self.current_char == '=':
                 self.advance()
+                if self.current_char == '=':
+                    self.advance()
+                    return Token("EQUAL_EQUAL", '==')
                 return Token("EQUAL", '=')
+
+            if self.current_char == '!':
+                self.advance()
+                if self.current_char == '=':
+                    self.advance()
+                    return Token("NOT_EQUAL", '!=')
+                raise Exception(f"Unexpected character: !")
+
+            if self.current_char == '>':
+                self.advance()
+                if self.current_char == '=':
+                    self.advance()
+                    return Token("GREATER_EQUAL", '>=')
+                return Token("GREATER", '>')
+
+            if self.current_char == '<':
+                self.advance()
+                if self.current_char == '=':
+                    self.advance()
+                    return Token("LESS_EQUAL", '<=')
+                return Token("LESS", '<')
 
             if self.current_char == '(':
                 self.advance()

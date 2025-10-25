@@ -1,4 +1,10 @@
 # --- Full test ---
+import sys
+import io
+
+# Set UTF-8 encoding for stdout
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
+
 from Lexer import Lexer
 from Parser import Parser
 from Interpreter import Interpreter
@@ -9,6 +15,14 @@ text = """
 ص = (ش + ع) * 2
 اكتب ص
 اكتب ش + ع
+اكتب "مرحبا بالعالم"
+اكتب 'هذا نص'
+x = 8
+y = 5
+اذا x > 5 اكتب "كبير"
+اذا x == 10 اكتب "عشرة" إلا اكتب "ليس عشرة"
+اكتب x > 5 و y < 10
+اكتب لا (x < 5)
 """
 
 lexer = Lexer(text)

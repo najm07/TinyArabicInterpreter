@@ -25,10 +25,21 @@ class Parser:
         return node
 
     def statement(self):
-        # assignment
-        if self.current_token.type == "PRINT":
+        # IF statement
+        if self.current_token.type == "IF":
+            self.eat("IF")
+            condition = self.logical_or()
+            then_branch = self.statement()
+            else_branch = None
+            if self.current_token and self.current_token.type == "ELSE":
+                self.eat("ELSE")
+                else_branch = self.statement()
+            return If(condition, then_branch, else_branch)
+        
+        # PRINT statement
+        elif self.current_token.type == "PRINT":
             self.eat("PRINT")
-            return Print(self.expr())
+            return Print(self.logical_or())
         else:
             if self.current_token.type == "IDENTIFIER":
                 var_name = self.current_token.value
@@ -36,13 +47,49 @@ class Parser:
 
                 if self.current_token and self.current_token.type == "EQUAL":
                     self.eat("EQUAL")
-                    expr_node = self.expr()
+                    expr_node = self.logical_or()
                     return Assign(var_name, expr_node)
                 else:
                     # if it's just a variable reference
                     return Var(var_name)
             else:
-                return self.expr()
+                return self.logical_or()
+
+    def logical_or(self):
+        """Handles OR operator (lowest precedence)"""
+        node = self.logical_and()
+
+        while self.current_token and self.current_token.type == "OR":
+            op = self.current_token.value
+            self.eat("OR")
+            right = self.logical_and()
+            node = LogicalOp(node, op, right)
+
+        return node
+
+    def logical_and(self):
+        """Handles AND operator"""
+        node = self.comparison()
+
+        while self.current_token and self.current_token.type == "AND":
+            op = self.current_token.value
+            self.eat("AND")
+            right = self.comparison()
+            node = LogicalOp(node, op, right)
+
+        return node
+
+    def comparison(self):
+        """Handles comparison operators (==, !=, >, <, >=, <=)"""
+        node = self.expr()
+
+        while self.current_token and self.current_token.type in ("EQUAL_EQUAL", "NOT_EQUAL", "GREATER", "LESS", "GREATER_EQUAL", "LESS_EQUAL"):
+            op = self.current_token.value
+            self.eat(self.current_token.type)
+            right = self.expr()
+            node = Comparison(node, op, right)
+
+        return node
 
     def expr(self):
         """Handles + and -"""
@@ -75,13 +122,21 @@ class Parser:
             self.eat("NUMBER")
             return Num(token.value)
 
+        elif token.type == "STRING":
+            self.eat("STRING")
+            return String(token.value)
+
         elif token.type == "IDENTIFIER":
             self.eat("IDENTIFIER")
             return Var(token.value)
 
+        elif token.type == "NOT":
+            self.eat("NOT")
+            return Not(self.factor())
+
         elif token.type == "LPAREN":
             self.eat("LPAREN")
-            node = self.expr()
+            node = self.logical_or()
             self.eat("RPAREN")
             return node
 

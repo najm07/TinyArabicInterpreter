@@ -12,7 +12,10 @@ class Interpreter:
             print(self.eval(node.value))
             return None
 
-        if isinstance(node, Num):
+        elif isinstance(node, Num):
+            return node.value
+
+        elif isinstance(node, String):
             return node.value
 
         elif isinstance(node, Var):
@@ -35,6 +38,47 @@ class Interpreter:
                 return left / right
             else:
                 raise Exception(f"Unknown operator: {node.op}")
+
+        elif isinstance(node, Comparison):
+            left = self.eval(node.left)
+            right = self.eval(node.right)
+
+            if node.op == '==':
+                return left == right
+            elif node.op == '!=':
+                return left != right
+            elif node.op == '>':
+                return left > right
+            elif node.op == '<':
+                return left < right
+            elif node.op == '>=':
+                return left >= right
+            elif node.op == '<=':
+                return left <= right
+            else:
+                raise Exception(f"Unknown comparison operator: {node.op}")
+
+        elif isinstance(node, LogicalOp):
+            left = self.eval(node.left)
+            right = self.eval(node.right)
+
+            if node.op == 'و':  # AND
+                return left and right
+            elif node.op == 'أو':  # OR
+                return left or right
+            else:
+                raise Exception(f"Unknown logical operator: {node.op}")
+
+        elif isinstance(node, Not):
+            return not self.eval(node.expr)
+
+        elif isinstance(node, If):
+            condition = self.eval(node.condition)
+            if condition:
+                return self.eval(node.then_branch)
+            elif node.else_branch:
+                return self.eval(node.else_branch)
+            return None
 
         elif isinstance(node, Assign):
             value = self.eval(node.value)
