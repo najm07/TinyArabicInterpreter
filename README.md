@@ -36,7 +36,7 @@ A simple yet powerful interpreter for an Arabic programming language, built from
 
 ### **Control Flow**
 - IF statements: `اذا condition statement`
-- IF-ELSE statements: `اذا condition statement إلا statement`
+- IF-ELSE statements: `اذا condition statement وإلا statement`
 
 ### **Output**
 - Print statements: `اكتب expression`
