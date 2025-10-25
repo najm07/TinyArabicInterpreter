@@ -26,6 +26,7 @@ class Lexer:
     def skip_whitespace(self):
         while self.current_char and self.current_char.isspace():
             self.advance()
+    
 
     def number(self):
         """Return a full number token (handles multi-digit)."""
@@ -68,10 +69,14 @@ class Lexer:
             return Token("NOT", result)
         if result == "اذا":
             return Token("IF", result)
-        if result == "إلا":
+        if result == "وإلا":
             return Token("ELSE", result)
-        if result == "منذ":
-            return Token("SINCE", result)
+        if result == "بينما":
+            return Token("WHILE", result)
+        if result == "لكل":
+            return Token("FOR", result)
+        if result == "في":
+            return Token("IN", result)
         if result == "حتى":
             return Token("UNTIL", result)
 
@@ -144,6 +149,18 @@ class Lexer:
             if self.current_char == ')':
                 self.advance()
                 return Token("RPAREN", ')')
+
+            if self.current_char == '[':
+                self.advance()
+                return Token("LBRACKET", '[')
+
+            if self.current_char == ']':
+                self.advance()
+                return Token("RBRACKET", ']')
+
+            if self.current_char == ';':
+                self.advance()
+                return Token("SEMICOLON", ';')
 
             raise Exception(f"Unexpected character: {self.current_char}")
 

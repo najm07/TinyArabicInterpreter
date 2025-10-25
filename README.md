@@ -37,6 +37,9 @@ A simple yet powerful interpreter for an Arabic programming language, built from
 ### **Control Flow**
 - IF statements: `اذا condition statement`
 - IF-ELSE statements: `اذا condition statement وإلا statement`
+- Compound statements: `[ statement1 statement2 ... ]`
+- WHILE loops: `بينما condition [ statements ]`
+- FOR loops: `لكل variable في start حتى end [ statements ]`
 
 ### **Output**
 - Print statements: `اكتب expression`
@@ -65,6 +68,18 @@ y = 5
 اكتب x + y
 اذا x > 5 اكتب "كبير"
 اكتب x == 10 و y < 10
+
+# Loops with compound statements
+counter = 1
+بينما counter <= 3 [
+    اكتب counter
+    counter = counter + 1
+]
+
+لكل i في 1 حتى 3 [
+    اكتب "i ="
+    اكتب i
+]
 """
 
 # Tokenize
@@ -130,6 +145,28 @@ x = 10
 
 # IF-ELSE statement
 اذا x == 10 اكتب "عشرة" إلا اكتب "ليس عشرة"
+
+# IF with compound statements
+اذا x > 3 [
+    اكتب "x is greater than 3"
+    اكتب "This is inside the if block"
+]
+```
+
+### **Loops**
+```arabic
+# WHILE loop with compound statements
+counter = 1
+بينما counter <= 3 [
+    اكتب counter
+    counter = counter + 1
+]
+
+# FOR loop with compound statements
+لكل i في 1 حتى 3 [
+    اكتب "i ="
+    اكتب i
+]
 ```
 
 ## 🏗️ Architecture
@@ -153,7 +190,7 @@ The interpreter is built with a classic three-stage architecture:
 
 ### **4. AST Classes (`ASTClasses.py`)**
 - Defines node types for the Abstract Syntax Tree
-- Includes: `Num`, `String`, `Var`, `BinOp`, `Comparison`, `LogicalOp`, `Not`, `If`, `Assign`, `Print`
+- Includes: `Num`, `String`, `Var`, `BinOp`, `Comparison`, `LogicalOp`, `Not`, `If`, `While`, `For`, `Block`, `Assign`, `Print`
 
 ## 📁 Project Structure
 
@@ -191,6 +228,25 @@ name = "أحمد"
 اكتب 'أهلاً وسهلاً'
 ```
 
+### **Compound Statements**
+```arabic
+# Use square brackets for multiple statements
+x = 10
+اذا x > 5 [
+    اكتب "x is greater than 5"
+    اكتب "This is a compound statement"
+    اكتب "Multiple statements in one block"
+]
+
+# Works with all control structures
+counter = 1
+بينما counter <= 3 [
+    اكتب "Counter:"
+    اكتب counter
+    counter = counter + 1
+]
+```
+
 ### **Complex Logic**
 ```arabic
 x = 10
@@ -200,6 +256,27 @@ z = 15
 اذا x > 5 و y < 10 اكتب "الشرط الأول صحيح"
 اذا x == 10 أو z > 20 اكتب "الشرط الثاني صحيح"
 اكتب لا (x < 5)
+```
+
+### **Loop Examples**
+```arabic
+# Countdown with while loop
+count = 5
+بينما count > 0 [
+    اكتب "العد التنازلي:"
+    اكتب count
+    count = count - 1
+]
+
+# Sum numbers with for loop
+sum = 0
+لكل i في 1 حتى 5 [
+    اكتب "إضافة"
+    اكتب i
+    sum = sum + i
+]
+اكتب "المجموع:"
+اكتب sum
 ```
 
 ## 🔧 Development

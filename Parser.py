@@ -25,6 +25,10 @@ class Parser:
         return node
 
     def statement(self):
+        # Block statement (brackets)
+        if self.current_token.type == "LBRACKET":
+            return self.block_statement()
+        
         # IF statement
         if self.current_token.type == "IF":
             self.eat("IF")
@@ -35,6 +39,25 @@ class Parser:
                 self.eat("ELSE")
                 else_branch = self.statement()
             return If(condition, then_branch, else_branch)
+        
+        # WHILE statement
+        elif self.current_token.type == "WHILE":
+            self.eat("WHILE")
+            condition = self.logical_or()
+            body = self.statement()  # This will handle INDENT/DEDENT
+            return While(condition, body)
+        
+        # FOR statement
+        elif self.current_token.type == "FOR":
+            self.eat("FOR")
+            var_name = self.current_token.value
+            self.eat("IDENTIFIER")
+            self.eat("IN")
+            start = self.logical_or()
+            self.eat("UNTIL")  # Using UNTIL as the range separator
+            end = self.logical_or()
+            body = self.statement()
+            return For(var_name, start, end, body)
         
         # PRINT statement
         elif self.current_token.type == "PRINT":
@@ -141,3 +164,15 @@ class Parser:
             return node
 
         raise Exception(f"Unexpected token: {token}")
+
+
+    def block_statement(self):
+        """Parse a block statement: [ statement1 statement2 ... ]"""
+        self.eat("LBRACKET")
+        statements = []
+        
+        while self.current_token and self.current_token.type != "RBRACKET":
+            statements.append(self.statement())
+        
+        self.eat("RBRACKET")
+        return Block(statements)

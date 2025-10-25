@@ -80,10 +80,28 @@ class Interpreter:
                 return self.eval(node.else_branch)
             return None
 
+        elif isinstance(node, While):
+            while self.eval(node.condition):
+                self.eval(node.body)
+            return None
+
+        elif isinstance(node, For):
+            start = self.eval(node.start)
+            end = self.eval(node.end)
+            for i in range(start, end + 1):
+                self.variables[node.variable] = i
+                self.eval(node.body)
+            return None
+
         elif isinstance(node, Assign):
             value = self.eval(node.value)
             self.variables[node.name] = value
             return value
+
+        elif isinstance(node, Block):
+            for statement in node.statements:
+                self.eval(statement)
+            return None
 
         else:
             raise Exception(f"Unknown node type: {node}")

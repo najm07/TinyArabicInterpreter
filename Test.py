@@ -10,19 +10,30 @@ from Parser import Parser
 from Interpreter import Interpreter
 
 text = """
-ش = 5 + 2 * 3
-ع = ش - 4
-ص = (ش + ع) * 2
-اكتب ص
-اكتب ش + ع
 اكتب "مرحبا بالعالم"
-اكتب 'هذا نص'
-x = 8
-y = 5
-اذا x > 5 اكتب "كبير"
-اذا x == 10 اكتب "عشرة" إلا اكتب "ليس عشرة"
-اكتب x > 5 و y < 10
-اكتب لا (x < 5)
+اكتب "بداية البرنامج"
+
+اكتب "If statement test:"
+x = 5
+اذا x > 3 [
+    اكتب "x is greater than 3"
+    اكتب "This is inside the if block"
+]
+
+اكتب "For loop test:"
+لكل i في 1 حتى 3 [
+    اكتب "i ="
+    اكتب i
+]
+
+اكتب "While loop test:"
+counter = 1
+بينما counter <= 3 [
+    اكتب counter
+    counter = counter + 1
+]
+
+اكتب "نهاية البرنامج"
 """
 
 lexer = Lexer(text)
