@@ -55,7 +55,18 @@ git clone https://github.com/najm07/TinyArabicInterpreter.git
 cd TinyArabicInterpreter
 ```
 
-### Usage
+### Interactive REPL (Recommended)
+```bash
+python REPL.py
+```
+
+The REPL provides an interactive environment where you can:
+- Type Arabic code line by line
+- See results immediately
+- Use special commands (`help`/`مساعدة`, `vars`/`متغيرات`, `clear`/`مسح`, `reset`/`إعادة`)
+- Support for multi-line compound statements
+
+### Programmatic Usage
 ```python
 from Lexer import Lexer
 from Parser import Parser
@@ -216,6 +227,7 @@ TinyInterpreter/
 ├── ASTClasses.py         # Abstract Syntax Tree node definitions + Visitor Pattern
 ├── Interpreter.py         # Clean interpreter interface
 ├── InterpreterVisitor.py # Evaluation logic implementation
+├── REPL.py               # Interactive Read-Eval-Print Loop
 ├── Test.py               # Example usage and testing
 └── README.md             # This file
 ```
@@ -331,7 +343,42 @@ node_type = ast_node.accept(type_checker)
 
 ### **Testing**
 ```bash
+# Run example programs
 python Test.py
+
+# Start interactive REPL
+python REPL.py
+```
+
+### **REPL Features**
+The interactive REPL provides:
+- **Real-time execution**: Type code and see results immediately
+- **Multi-line support**: Use square brackets `[]` for compound statements
+- **Variable persistence**: Variables remain available across commands
+- **Error handling**: Clear error messages with graceful recovery
+- **Special commands**: Built-in utilities for debugging and navigation
+
+### **REPL Commands**
+- `help` / `مساعدة` - Show help and syntax examples
+- `quit` / `خروج` - Exit the REPL
+- `clear` / `مسح` - Clear the screen
+- `vars` / `متغيرات` - Show all current variables
+- `reset` / `إعادة` - Reset interpreter state
+
+### **REPL Example Session**
+```bash
+>>> x = 10
+>>> اكتب x
+10
+>>> اكتب x + 5
+15
+>>> اذا x > 5 اكتب "كبير"
+كبير
+>>> متغيرات
+📊 Current Variables:
+  x = 10
+>>> خروج
+👋 وداعاً! Goodbye!
 ```
 
 ## 📚 Educational Value
