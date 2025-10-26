@@ -10,16 +10,19 @@ A simple yet powerful interpreter for an Arabic programming language, built from
 - Multiplication: `*`
 - Division: `/`
 - Parentheses for grouping: `(expression)`
+- Negative numbers: `-5`, `-10`
 
 ### **Variables**
 - Variable assignment: `variable = value`
 - Variable referencing in expressions
 - Dynamic typing
+- Support for underscores in variable names
 
 ### **String Literals**
 - Double quotes: `"مرحبا بالعالم"`
 - Single quotes: `'هذا نص'`
 - Full Unicode support for Arabic text
+- String concatenation with mixed types
 
 ### **Comparison Operators**
 - Equality: `==`
@@ -43,6 +46,21 @@ A simple yet powerful interpreter for an Arabic programming language, built from
 
 ### **Output**
 - Print statements: `اكتب expression`
+
+### **Error Handling**
+- **Structured Error System**: Professional-grade error reporting
+- **Position Tracking**: Exact line/column information for errors
+- **Error Types**: LexicalError, ParseError, NameError, ZeroDivisionError, etc.
+- **Visual Error Context**: Beautiful error display with pointers
+- **Graceful Recovery**: Errors don't crash the interpreter
+
+### **Interactive REPL**
+- **Real-time execution**: Type code and see results immediately
+- **Multi-line support**: Use square brackets `[]` for compound statements
+- **Variable persistence**: Variables remain available across commands
+- **Error handling**: Clear error messages with graceful recovery
+- **Special commands**: Built-in utilities for debugging and navigation
+- **Arabic commands**: Use Arabic keywords for REPL commands
 
 ## 🚀 Quick Start
 
@@ -222,14 +240,17 @@ The interpreter is built with a clean, modular architecture using the **Visitor 
 
 ```
 TinyInterpreter/
-├── Lexer.py              # Lexical analysis
+├── Lexer.py              # Lexical analysis with position tracking
 ├── Parser.py             # Syntax analysis and parsing
 ├── ASTClasses.py         # Abstract Syntax Tree node definitions + Visitor Pattern
 ├── Interpreter.py         # Clean interpreter interface
 ├── InterpreterVisitor.py # Evaluation logic implementation
+├── Errors.py             # Structured error system
 ├── REPL.py               # Interactive Read-Eval-Print Loop
-├── Test.py               # Example usage and testing
-└── README.md             # This file
+├── Test.py               # Comprehensive test suite
+├── README.md             # This file
+├── CONTRIBUTING.md       # Contribution guidelines
+└── ARCHITECTURE.md       # Technical architecture documentation
 ```
 
 ## 🧪 Example Programs
@@ -343,11 +364,41 @@ node_type = ast_node.accept(type_checker)
 
 ### **Testing**
 ```bash
-# Run example programs
+# Run comprehensive test suite
 python Test.py
 
 # Start interactive REPL
 python REPL.py
+```
+
+### **Comprehensive Test Suite**
+The test suite covers all aspects of the interpreter:
+- ✅ **Basic Features**: Numbers, Strings, Variables
+- ✅ **Comparison Operators**: All comparison operations
+- ✅ **Logical Operators**: Arabic AND, OR, NOT
+- ✅ **Control Flow**: IF, IF-ELSE, Compound Statements
+- ✅ **Loops**: WHILE and FOR loops with nesting
+- ✅ **Error Handling**: All error types with position tracking
+- ✅ **Complex Expressions**: Operator precedence, mixed types
+- ✅ **Edge Cases**: Zero, negative numbers, empty values
+- ✅ **Arabic Keywords**: All Arabic language constructs
+- ✅ **Visitor Pattern**: Clean architecture validation
+
+### **Error System**
+The interpreter features a professional-grade error system:
+- **Structured Errors**: Specific error types (LexicalError, ParseError, NameError, etc.)
+- **Position Tracking**: Exact line and column information for all errors
+- **Visual Context**: Beautiful error display with code context and pointers
+- **Graceful Recovery**: Errors don't crash the interpreter or REPL
+
+**Example Error Display:**
+```
+❌ LexicalError: Unexpected character: @
+📍 Location: line 1, column 5
+
+📝 Context:
+   1 | x = @
+          ^
 ```
 
 ### **REPL Features**

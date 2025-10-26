@@ -5,6 +5,7 @@ import io
 from Lexer import Lexer
 from Parser import Parser
 from Interpreter import Interpreter
+from Errors import TinyInterpreterError, create_error_context
 
 class REPL:
     """Interactive Read-Eval-Print Loop for the Arabic interpreter."""
@@ -142,6 +143,21 @@ class REPL:
         
         return False
     
+    def print_structured_error(self, error):
+        """Print a structured error with context."""
+        print(f"\n❌ {error.__class__.__name__}: {error.message}")
+        
+        if error.position:
+            print(f"📍 Location: line {error.position.line}, column {error.position.column}")
+            
+            # Create error context
+            context = create_error_context(self.buffer, error.position)
+            if context:
+                print("\n📝 Context:")
+                print(context)
+        
+        print()  # Add spacing
+
     def execute_buffer(self):
         """Execute the current buffer."""
         if not self.buffer.strip():
@@ -168,8 +184,12 @@ class REPL:
             self.buffer = ""
             return False
             
+        except TinyInterpreterError as e:
+            self.print_structured_error(e)
+            self.buffer = ""  # Clear buffer on error
+            return False
         except Exception as e:
-            print(f"❌ Error: {e}")
+            print(f"❌ Unexpected error: {e}")
             self.buffer = ""  # Clear buffer on error
             return False
     

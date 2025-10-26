@@ -1,6 +1,7 @@
 # --- Interpreter Visitor: Implements Visitor Pattern for AST Evaluation ---
 
 from ASTClasses import Visitor
+from Errors import RuntimeError, NameError, TypeError, ZeroDivisionError, ValueError
 
 class InterpreterVisitor(Visitor):
     """Visitor implementation for interpreting AST nodes."""
@@ -21,7 +22,7 @@ class InterpreterVisitor(Visitor):
         if node.name in self.variables:
             return self.variables[node.name]
         else:
-            raise Exception(f"Undefined variable: {node.name}")
+            raise NameError(f"Undefined variable: {node.name}", node.position)
     
     def visit_binop(self, node):
         """Visit a BinOp node."""
@@ -29,15 +30,20 @@ class InterpreterVisitor(Visitor):
         right = node.right.accept(self)
         
         if node.op == '+':
+            # Handle string concatenation
+            if isinstance(left, str) or isinstance(right, str):
+                return str(left) + str(right)
             return left + right
         elif node.op == '-':
             return left - right
         elif node.op == '*':
             return left * right
         elif node.op == '/':
+            if right == 0:
+                raise ZeroDivisionError("Division by zero", node.position)
             return left / right
         else:
-            raise Exception(f"Unknown operator: {node.op}")
+            raise RuntimeError(f"Unknown operator: {node.op}", node.position)
     
     def visit_assign(self, node):
         """Visit an Assign node."""
@@ -69,7 +75,7 @@ class InterpreterVisitor(Visitor):
         elif node.op == '<=':
             return left <= right
         else:
-            raise Exception(f"Unknown comparison operator: {node.op}")
+            raise RuntimeError(f"Unknown comparison operator: {node.op}", node.position)
     
     def visit_logicalop(self, node):
         """Visit a LogicalOp node."""
@@ -81,7 +87,7 @@ class InterpreterVisitor(Visitor):
         elif node.op == 'أو':  # OR
             return left or right
         else:
-            raise Exception(f"Unknown logical operator: {node.op}")
+            raise RuntimeError(f"Unknown logical operator: {node.op}", node.position)
     
     def visit_not(self, node):
         """Visit a Not node."""

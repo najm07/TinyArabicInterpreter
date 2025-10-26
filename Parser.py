@@ -1,4 +1,5 @@
 from ASTClasses import *
+from Errors import ParseError
 
 # --- Tiny Interpreter: Parser Stage ---
 
@@ -17,7 +18,10 @@ class Parser:
             else:
                 self.current_token = None
         else:
-            raise Exception(f"Expected {token_type}, got {self.current_token}")
+            expected = token_type
+            got = self.current_token.type if self.current_token else "EOF"
+            position = self.current_token.position if self.current_token else None
+            raise ParseError(f"Expected {expected}, got {got}", position)
 
     # Grammar start: statement
     def parse(self):
@@ -25,6 +29,9 @@ class Parser:
         return node
 
     def statement(self):
+        if not self.current_token:
+            raise ParseError("Unexpected end of input", None)
+            
         # Block statement (brackets)
         if self.current_token.type == "LBRACKET":
             return self.block_statement()
@@ -120,9 +127,10 @@ class Parser:
 
         while self.current_token and self.current_token.type in ("PLUS", "MINUS"):
             op = self.current_token.value
+            op_pos = self.current_token.position
             self.eat(self.current_token.type)
             right = self.term()
-            node = BinOp(node, op, right)
+            node = BinOp(node, op, right, op_pos)
 
         return node
 
@@ -132,26 +140,30 @@ class Parser:
 
         while self.current_token and self.current_token.type in ("STAR", "SLASH"):
             op = self.current_token.value
+            op_pos = self.current_token.position
             self.eat(self.current_token.type)
             right = self.factor()
-            node = BinOp(node, op, right)
+            node = BinOp(node, op, right, op_pos)
 
         return node
 
     def factor(self):
         token = self.current_token
+        
+        if not token:
+            raise ParseError("Unexpected end of input", None)
 
         if token.type == "NUMBER":
             self.eat("NUMBER")
-            return Num(token.value)
+            return Num(token.value, token.position)
 
         elif token.type == "STRING":
             self.eat("STRING")
-            return String(token.value)
+            return String(token.value, token.position)
 
         elif token.type == "IDENTIFIER":
             self.eat("IDENTIFIER")
-            return Var(token.value)
+            return Var(token.value, token.position)
 
         elif token.type == "NOT":
             self.eat("NOT")

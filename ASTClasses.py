@@ -43,51 +43,57 @@ class Visitor:
         raise NotImplementedError("visit_block must be implemented")
 
 class Num:
-    def __init__(self, value):
+    def __init__(self, value, position=None):
         self.value = value
+        self.position = position
     def __repr__(self):
         return f"Num({self.value})"
     def accept(self, visitor):
         return visitor.visit_num(self)
 
 class String:
-    def __init__(self, value):
+    def __init__(self, value, position=None):
         self.value = value
+        self.position = position
     def __repr__(self):
         return f"String({self.value})"
     def accept(self, visitor):
         return visitor.visit_string(self)
 
 class Var:
-    def __init__(self, name):
+    def __init__(self, name, position=None):
         self.name = name
+        self.position = position
     def __repr__(self):
         return f"Var({self.name})"
     def accept(self, visitor):
         return visitor.visit_var(self)
 
 class BinOp:
-    def __init__(self, left, op, right):
+    def __init__(self, left, op, right, position=None):
         self.left = left
         self.op = op
         self.right = right
+        self.position = position
     def __repr__(self):
         return f"BinOp({self.left}, {self.op}, {self.right})"
     def accept(self, visitor):
         return visitor.visit_binop(self)
 
 class Assign:
-    def __init__(self, name, value):
+    def __init__(self, name, value, position=None):
         self.name = name
         self.value = value
+        self.position = position
     def __repr__(self):
         return f"Assign({self.name}, {self.value})"
     def accept(self, visitor):
         return visitor.visit_assign(self)
 
 class Print:
-    def __init__(self, value):
+    def __init__(self, value, position=None):
         self.value = value
+        self.position = position
     def __repr__(self):
         return f"Print({self.value})"
     def accept(self, visitor):
