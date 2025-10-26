@@ -171,7 +171,7 @@ counter = 1
 
 ## 🏗️ Architecture
 
-The interpreter is built with a classic three-stage architecture:
+The interpreter is built with a clean, modular architecture using the **Visitor Pattern** for separation of concerns:
 
 ### **1. Lexer (`Lexer.py`)**
 - Tokenizes input text into tokens
@@ -183,25 +183,41 @@ The interpreter is built with a classic three-stage architecture:
 - Implements operator precedence
 - Handles control flow structures
 
-### **3. Interpreter (`Interpreter.py`)**
-- Evaluates AST nodes
+### **3. AST Classes (`ASTClasses.py`)**
+- Defines node types for the Abstract Syntax Tree
+- Implements **Visitor Pattern** with `accept(visitor)` methods
+- Includes: `Num`, `String`, `Var`, `BinOp`, `Comparison`, `LogicalOp`, `Not`, `If`, `While`, `For`, `Block`, `Assign`, `Print`
+- Contains abstract `Visitor` base class
+
+### **4. Interpreter (`Interpreter.py`)**
+- Clean interface using visitor pattern
+- Delegates evaluation to `InterpreterVisitor`
+- No tight coupling with AST node internals
+
+### **5. InterpreterVisitor (`InterpreterVisitor.py`)**
+- Implements the `Visitor` interface
+- Contains all evaluation logic
 - Manages variable environment
 - Executes program logic
 
-### **4. AST Classes (`ASTClasses.py`)**
-- Defines node types for the Abstract Syntax Tree
-- Includes: `Num`, `String`, `Var`, `BinOp`, `Comparison`, `LogicalOp`, `Not`, `If`, `While`, `For`, `Block`, `Assign`, `Print`
+### **🎯 Visitor Pattern Benefits**
+- **Clean Architecture**: No tight coupling between interpreter and AST nodes
+- **Single Responsibility**: Each visitor handles one specific concern
+- **Easy Extension**: Add new visitors (type checker, optimizer, pretty printer) without modifying existing code
+- **Better Testing**: Test each visitor independently
+- **Maintainability**: Changes to evaluation logic don't affect AST structure
 
 ## 📁 Project Structure
 
 ```
 TinyInterpreter/
-├── Lexer.py          # Lexical analysis
-├── Parser.py         # Syntax analysis and parsing
-├── ASTClasses.py     # Abstract Syntax Tree node definitions
-├── Interpreter.py    # Program evaluation and execution
-├── Test.py           # Example usage and testing
-└── README.md         # This file
+├── Lexer.py              # Lexical analysis
+├── Parser.py             # Syntax analysis and parsing
+├── ASTClasses.py         # Abstract Syntax Tree node definitions + Visitor Pattern
+├── Interpreter.py         # Clean interpreter interface
+├── InterpreterVisitor.py # Evaluation logic implementation
+├── Test.py               # Example usage and testing
+└── README.md             # This file
 ```
 
 ## 🧪 Example Programs
@@ -284,8 +300,34 @@ sum = 0
 ### **Adding New Features**
 1. **Lexer**: Add token recognition in `get_next_token()`
 2. **Parser**: Add grammar rules in appropriate precedence level
-3. **AST**: Create new AST node classes
-4. **Interpreter**: Add evaluation logic in `eval()` method
+3. **AST**: Create new AST node classes with `accept(visitor)` method
+4. **Visitor**: Add visit method to `Visitor` base class
+5. **InterpreterVisitor**: Implement evaluation logic in appropriate visit method
+
+### **Adding New Visitors**
+The Visitor Pattern makes it easy to add new functionality:
+
+```python
+# Example: Type Checker Visitor
+class TypeCheckerVisitor(Visitor):
+    def visit_num(self, node):
+        return "number"
+    
+    def visit_string(self, node):
+        return "string"
+    
+    # ... implement other visit methods
+
+# Usage
+type_checker = TypeCheckerVisitor()
+node_type = ast_node.accept(type_checker)
+```
+
+### **Benefits of Visitor Pattern**
+- **Separation of Concerns**: Evaluation logic separate from AST structure
+- **Extensibility**: Easy to add new visitors (pretty printer, optimizer, type checker)
+- **Maintainability**: Each visitor focuses on one responsibility
+- **Testability**: Can test visitors independently
 
 ### **Testing**
 ```bash
@@ -298,8 +340,9 @@ This project demonstrates:
 - **Compiler Design**: Lexical analysis, parsing, and interpretation
 - **Language Design**: Syntax design and operator precedence
 - **AST Implementation**: Tree-based program representation
+- **Visitor Pattern**: Clean separation of concerns and extensibility
 - **Unicode Handling**: Arabic text processing
-- **Object-Oriented Design**: Modular architecture
+- **Object-Oriented Design**: Modular architecture with design patterns
 
 ## 🤝 Contributing
 

@@ -33,6 +33,21 @@ counter = 1
     counter = counter + 1
 ]
 
+اكتب "Complex expression test:"
+a = 10
+b = 5
+result = a + b * 2
+اكتب "Result:"
+اكتب result
+
+اكتب "Logical operations test:"
+اكتب a > 5 و b < 10
+اكتب a == 10 أو b > 10
+
+name = "أحمد"
+اكتب "مرحبا " + name
+اكتب 'أهلاً وسهلاً'
+
 اكتب "نهاية البرنامج"
 """
 
