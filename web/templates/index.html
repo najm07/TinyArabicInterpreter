@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TinyInterpreter - Arabic REPL</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎉 TinyInterpreter - مترجم اللغة العربية</h1>
+            <p class="subtitle">Arabic Programming Language Interactive REPL</p>
+        </header>
+        
+        <div class="repl-container">
+            <div class="output-panel" id="output">
+                <div class="welcome-message">
+                    <h2>🎉 مرحبا بك في مترجم اللغة العربية</h2>
+                    <p>🎉 Welcome to the Arabic Language Interpreter REPL</p>
+                    <hr>
+                    <p>📝 Type Arabic code and press Enter to execute</p>
+                    <p>📝 Type 'help' or 'مساعدة' for commands, 'quit' or 'خروج' to exit</p>
+                    <p>📝 Use square brackets [] for compound statements</p>
+                    <div class="quick-commands">
+                        <h3>Quick Commands:</h3>
+                        <ul>
+                            <li><code>help</code> / <code>مساعدة</code> - Show help</li>
+                            <li><code>reset</code> / <code>إعادة</code> - Reset interpreter</li>
+                            <li><code>vars</code> / <code>متغيرات</code> - Show variables</li>
+                            <li><code>quit</code> / <code>خروج</code> - Exit REPL</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="input-panel">
+                <div class="prompt">
+                    <span class="prompt-arrow">>>></span>
+                    <textarea id="input" rows="1" placeholder="Enter your Arabic code here..."></textarea>
+                </div>
+                <div class="controls">
+                    <button id="execute-btn" onclick="executeCode()">Execute</button>
+                    <button id="reset-btn" onclick="resetInterpreter()">Reset</button>
+                    <button id="vars-btn" onclick="showVariables()">Variables</button>
+                    <button id="clear-btn" onclick="clearOutput()">Clear</button>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Built with Flask and Python | TinyInterpreter v1.0</p>
+        </footer>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

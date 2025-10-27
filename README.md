@@ -73,16 +73,27 @@ git clone https://github.com/najm07/TinyArabicInterpreter.git
 cd TinyArabicInterpreter
 ```
 
-### Interactive REPL (Recommended)
+### Interactive REPL
+
+**Option 1: Terminal REPL**
 ```bash
 python REPL.py
 ```
+
+**Option 2: Web Interface (Recommended for Arabic RTL support)**
+```bash
+cd web
+pip install -r requirements.txt
+python app.py
+```
+Then open `http://localhost:5000` in your browser.
 
 The REPL provides an interactive environment where you can:
 - Type Arabic code line by line
 - See results immediately
 - Use special commands (`help`/`مساعدة`, `vars`/`متغيرات`, `clear`/`مسح`, `reset`/`إعادة`)
 - Support for multi-line compound statements
+- **Web interface**: Full RTL support for proper Arabic text display
 
 ### Programmatic Usage
 ```python
